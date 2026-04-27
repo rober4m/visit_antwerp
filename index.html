@@ -697,6 +697,18 @@ const map = new mapboxgl.Map({
 map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'top-right');
 map.addControl(new mapboxgl.AttributionControl({ compact: true }), 'bottom-left');
 
+const geolocate = new mapboxgl.GeolocateControl({
+  positionOptions: { enableHighAccuracy: true },
+  trackUserLocation: true,
+  showUserHeading: true,
+});
+
+map.addControl(geolocate, 'bottom-right');
+
+// Auto-trigger after map loads
+geolocate.on('trackuserlocationstart', () => {});
+map.once('idle', () => geolocate.trigger());
+
 // ─── HELPERS ─────────────────────────────────────────────────────
 function formatDistance(m) {
   return m >= 1000 ? (m / 1000).toFixed(1) + ' km' : Math.round(m) + ' m';
